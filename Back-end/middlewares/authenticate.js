@@ -24,3 +24,20 @@ export const authenticateAdmin = async(req,res,next) =>{
         res.status(500).json({status:500, message:'Internal Server Error'})
     }
 }
+
+export const checkAdmin = async(req,res,next) =>{
+try {
+    if(!req.admin){
+        return res.status(401).json({status:400,message:'Admin is not authenticated'})
+    }
+    if(req.admin.role == 'admin'){
+       return  next()
+    }
+
+    res.status(403).json({status:403, mesage:"You don't have the right permissions"})
+
+} catch (error) {
+      console.error('Error in AdminRole middleware:', error);
+    res.status(500).json({ message: 'Internal Server Error', error: error.message });
+}
+}
